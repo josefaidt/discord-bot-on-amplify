@@ -1,5 +1,7 @@
 # Discord Bot on Amplify
 
+![image](https://user-images.githubusercontent.com/5033303/132928672-95479b10-c0c8-4bde-9bf7-7150eee73787.png)
+
 Prerequisites:
 
 - [AWS Account](https://aws.amazon.com/account/)
