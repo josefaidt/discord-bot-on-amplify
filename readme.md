@@ -12,7 +12,7 @@ Prerequisites:
 1. [Create a new Discord Application](https://discord.com/developers/applications)
 
    1. take note of the Application ID and Public Key
-   2. add a bot
+   2. add a bot, take note of Bot secret
    3. add newly created Discord bot to our Discord server
 
       ```text
