@@ -1,0 +1,35 @@
+{
+  "name": "discord-bot-on-amplify",
+  "version": "0.1.1",
+  "license": "MIT",
+  "prettier": {
+    "tabWidth": 2,
+    "bracketSpacing": true,
+    "singleQuote": true,
+    "printWidth": 80,
+    "useTabs": false,
+    "semi": false
+  },
+  "devDependencies": {
+    "eslint": "^7.32.0",
+    "eslint-config-prettier": "^8.3.0",
+    "nodemon": "^2.0.12",
+    "prettier": "^2.4.0"
+  },
+  "eslintConfig": {
+    "root": true,
+    "extends": [
+      "eslint:recommended",
+      "prettier"
+    ],
+    "parserOptions": {
+      "sourceType": "module",
+      "ecmaVersion": 2020
+    },
+    "env": {
+      "browser": false,
+      "es2017": true,
+      "node": true
+    }
+  }
+}

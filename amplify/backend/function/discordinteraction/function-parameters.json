@@ -1,0 +1,16 @@
+{
+  "lambdaLayers": [
+    {
+      "type": "ProjectLayer",
+      "resourceName": "discordbotonamplifydiscordlayer",
+      "env": "next",
+      "version": "Always choose latest version",
+      "isLatestVersionSelected": true
+    }
+  ],
+  "secretNames": [
+    "DISCORD_BOT_TOKEN",
+    "DISCORD_APP_ID",
+    "DISCORD_PUBLIC_KEY"
+  ]
+}
