@@ -23,3 +23,10 @@ Prerequisites:
 
 2. `amplify init`
 3. add secrets, run `amplify push`
+4. Add the REST API URL + `/interact` to the Discord application's "Interaction Endpoint URL"
+5. visit the REST API URL + `/sync` to sync the commands
+
+## Coming Soon
+
+- Authentication
+- GraphQL API for functionality like syncing commands
