@@ -1,6 +1,11 @@
 const { SSMClient, GetParametersCommand } = require('@aws-sdk/client-ssm')
 
-exports.getSecrets = async function getSecrets(secretNames) {
+const SECRET_NAMES = [
+  'DISCORD_BOT_TOKEN',
+  'DISCORD_APP_ID',
+  'DISCORD_PUBLIC_KEY',
+]
+async function getSecrets(secretNames) {
   const client = new SSMClient({ region: process.env.AWS_REGION })
   const Names = secretNames.map((secretName) => process.env[secretName])
   const command = new GetParametersCommand({ Names, WithDecryption: true })
@@ -12,3 +17,21 @@ exports.getSecrets = async function getSecrets(secretNames) {
     return acc
   }, {})
 }
+
+async function loadSecrets() {
+  console.log('Loading secrets')
+  try {
+    const secrets = await getSecrets(SECRET_NAMES)
+    for (let [secretName, secretValue] of Object.entries(secrets)) {
+      process.env[secretName] = secretValue
+    }
+    console.log('Secrets loaded successfully')
+    return true
+  } catch (error) {
+    throw new Error('Unable to fetch secrets', error)
+  }
+}
+
+exports.SECRET_NAMES = SECRET_NAMES
+exports.loadSecrets = loadSecrets
+exports.getSecrets = getSecrets

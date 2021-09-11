@@ -1,28 +1,8 @@
 const { bank } = require('/opt/bank')
 const { generateResponse, verifyEvent } = require('/opt/discord')
-const { getSecrets } = require('/opt/secrets')
+const { loadSecrets } = require('/opt/secrets')
 
-let secrets
-const secretNames = [
-  'DISCORD_BOT_TOKEN',
-  'DISCORD_APP_ID',
-  'DISCORD_PUBLIC_KEY',
-]
-
-async function loadSecrets() {
-  console.log('Loading secrets')
-  try {
-    const secrets = await getSecrets(secretNames)
-    for (let [secretName, secretValue] of Object.entries(secrets)) {
-      process.env[secretName] = secretValue
-    }
-  } catch (error) {
-    console.log(error)
-  }
-  console.log('Secrets successfully loaded', process.env)
-}
-
-async function handleCommand({ token, context }) {
+async function handleCommand({ context }) {
   const somethingWentWrongResponse = '🤕 Something went wrong'
   const command = bank.get(context.data.name)
   if (!command) throw new Error(`Invalid slash command: ${context.data.name}`)
@@ -45,14 +25,12 @@ async function handleCommand({ token, context }) {
   return toRespond
 }
 
+let secretsLoaded = false
 exports.interact = async function interact(event) {
   console.log('EVENT:', JSON.stringify(event))
-  if (!secrets) {
-    secrets = await getSecrets(secretNames)
-    await loadSecrets()
-  }
+  if (!secretsLoaded && (await loadSecrets())) secretsLoaded = true
   if (event?.body) {
-    const { type, token, ...context } = event.body
+    const { type, ...context } = event.body
     const verified = await verifyEvent(event)
     switch (type) {
       case 1: {
@@ -65,7 +43,7 @@ exports.interact = async function interact(event) {
         if (verified) {
           return {
             type: 4,
-            data: await handleCommand({ token, context }),
+            data: await handleCommand({ context }),
           }
         }
         break

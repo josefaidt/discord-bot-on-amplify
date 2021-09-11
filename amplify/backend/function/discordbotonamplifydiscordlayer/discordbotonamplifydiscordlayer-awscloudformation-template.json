@@ -20,7 +20,7 @@
     }
   },
   "Resources": {
-    "LambdaLayerVersion973f9a72": {
+    "LambdaLayerVersion078c7435": {
       "Type": "AWS::Lambda::LayerVersion",
       "Properties": {
         "CompatibleRuntimes": {
@@ -51,13 +51,60 @@
       "DeletionPolicy": "Delete",
       "UpdateReplacePolicy": "Retain"
     },
-    "LambdaLayerPermissionAwsAccounts229156689808973f9a72": {
+    "LambdaLayerPermissionAwsAccounts229156689808078c7435": {
       "Type": "AWS::Lambda::LayerVersionPermission",
       "Properties": {
         "Action": "lambda:GetLayerVersion",
         "LayerVersionArn": {
-          "Ref": "LambdaLayerVersion973f9a72"
+          "Ref": "LambdaLayerVersion078c7435"
         },
+        "Principal": "229156689808"
+      }
+    },
+    "LambdaLayerPermissionPrivate078c7435": {
+      "Type": "AWS::Lambda::LayerVersionPermission",
+      "Properties": {
+        "Action": "lambda:GetLayerVersion",
+        "LayerVersionArn": {
+          "Ref": "LambdaLayerVersion078c7435"
+        },
+        "Principal": {
+          "Ref": "AWS::AccountId"
+        }
+      }
+    },
+    "LambdaLayerVersion973f9a72": {
+      "Type": "AWS::Lambda::LayerVersion",
+      "Properties": {
+        "CompatibleRuntimes": [
+          "nodejs14.x"
+        ],
+        "Content": {
+          "S3Bucket": {
+            "Ref": "deploymentBucketName"
+          },
+          "S3Key": "amplify-builds/discordbotonamplifydiscordlayer-LambdaLayerVersion973f9a72-build.zip"
+        },
+        "Description": "Updated layer version 2021-09-10T23:14:37.656Z",
+        "LayerName": {
+          "Fn::Sub": [
+            "discordbotonamplifydiscordlayer-${env}",
+            {
+              "env": {
+                "Ref": "env"
+              }
+            }
+          ]
+        }
+      },
+      "DeletionPolicy": "Delete",
+      "UpdateReplacePolicy": "Retain"
+    },
+    "LambdaLayerPermissionAwsAccounts229156689808973f9a72": {
+      "Type": "AWS::Lambda::LayerVersionPermission",
+      "Properties": {
+        "Action": "lambda:GetLayerVersion",
+        "LayerVersionArn": "arn:aws:lambda:us-east-1:229156689808:layer:discordbotonamplifydiscordlayer-next:6",
         "Principal": "229156689808"
       }
     },
@@ -65,9 +112,7 @@
       "Type": "AWS::Lambda::LayerVersionPermission",
       "Properties": {
         "Action": "lambda:GetLayerVersion",
-        "LayerVersionArn": {
-          "Ref": "LambdaLayerVersion973f9a72"
-        },
+        "LayerVersionArn": "arn:aws:lambda:us-east-1:229156689808:layer:discordbotonamplifydiscordlayer-next:6",
         "Principal": {
           "Ref": "AWS::AccountId"
         }
@@ -302,7 +347,7 @@
   "Outputs": {
     "Arn": {
       "Value": {
-        "Ref": "LambdaLayerVersion973f9a72"
+        "Ref": "LambdaLayerVersion078c7435"
       }
     }
   }

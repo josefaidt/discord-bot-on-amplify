@@ -1,40 +1,19 @@
-const { SSMClient, GetParametersCommand } = require('@aws-sdk/client-ssm')
 const fetch = require('node-fetch')
 const { bank } = require('/opt/bank')
-
-let secrets
-async function getSecrets() {
-  const client = new SSMClient({ region: process.env.AWS_REGION })
-
-  const secretNames = [
-    'DISCORD_BOT_TOKEN',
-    'DISCORD_APP_ID',
-    'DISCORD_PUBLIC_KEY',
-  ]
-  const Names = secretNames.map((secretName) => process.env[secretName])
-
-  const command = new GetParametersCommand({ Names, WithDecryption: true })
-  const params = await client.send(command)
-
-  return params.Parameters?.reduce((acc, { Name, Value }, index) => {
-    if (Name)
-      acc[secretNames.find((secretName) => Name.endsWith(secretName))] = Value
-    return acc
-  }, {})
-}
+const { loadSecrets } = require('/opt/secrets')
 
 async function registerCommand(command, { guildId }) {
   const config = {
     method: 'POST',
     headers: {
-      Authorization: `Bot ${secrets.DISCORD_BOT_TOKEN}`,
+      Authorization: `Bot ${process.env.DISCORD_BOT_TOKEN}`,
       'Content-Type': 'application/json',
     },
     body: JSON.stringify(command.config),
   }
-  let url = `https://discord.com/api/v8/applications/${secrets.DISCORD_APP_ID}/commands`
+  let url = `https://discord.com/api/v8/applications/${process.env.DISCORD_APP_ID}/commands`
   if (guildId) {
-    url = `https://discord.com/api/v8/applications/${secrets.DISCORD_APP_ID}/guilds/${guildId}/commands`
+    url = `https://discord.com/api/v8/applications/${process.env.DISCORD_APP_ID}/guilds/${guildId}/commands`
   }
 
   let data
@@ -71,9 +50,10 @@ async function syncCommands() {
   return await Promise.allSettled(commands)
 }
 
+let secretsLoaded = false
 exports.handler = async function handler(event) {
   console.log('EVENT:', JSON.stringify(event))
-  if (!secrets) secrets = await getSecrets()
+  if (!secretsLoaded && (await loadSecrets())) secretsLoaded = true
   try {
     return {
       statusCode: 200,
